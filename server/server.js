@@ -16,9 +16,13 @@ app.use(express.static(publicPath));
 
     //from server to client
     socket.emit('newMessage',{
-        from:'John',
-        text:'see you then',
-        createAt: 123123
+        from:'Admin',
+        text:'Welcome to the chat app'
+    });
+    socket.broadcast.emit('newMessage',{
+        from:'Admin',
+        text:'New user joined',
+        createAt: new Date().getTime
     });
 
     //from client to server
@@ -29,6 +33,13 @@ app.use(express.static(publicPath));
             text:message.text,
             createAt:new Date().getTime
         });
+        
+        //wont see message sent by yourself,but others will
+        // socket.broadcast.emit('newMessage',{
+        //     from:message.from,
+        //     text:message.text,
+        //     createAt:new Date().getTime
+        // });
     });
 
     socket.on('disconnect', () => {
